@@ -1,0 +1,6 @@
+{
+  "application": "Online-Botanicals",
+  "applicationProcess": "Deploy OB Application",
+  "environment": "DEV",
+  "snapshot": "MYNAME"
+}

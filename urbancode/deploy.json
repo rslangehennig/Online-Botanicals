@@ -1,0 +1,11 @@
+{
+  "application": "Online-Botanicals",
+  "applicationProcess": "Deploy OB Application",
+  "environment": "DEV",
+  "versions": [
+    {
+      "version": "latest",
+      "component": "Online-Botanical-APP"
+    }
+  ]
+}
