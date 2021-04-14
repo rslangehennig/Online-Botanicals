@@ -1,0 +1,106 @@
+{
+  "_id": "607665f7b7e65f030ecaec8a",
+  "pipelineId": "b6587ae6-dbfc-4da3-bcb8-8033695fa948",
+  "tenantId": "5ade13625558f2c6688d15ce",
+  "description": null,
+  "query": "",
+  "phases": [
+    {
+      "name": "Planning",
+      "stages": [
+        {
+          "name": "Backlog",
+          "query": "issue.status=Backlog"
+        },
+        {
+          "name": "To Do",
+          "query": "issue.status='To Do'"
+        }
+      ]
+    },
+    {
+      "name": "Development",
+      "description": "",
+      "stages": [
+        {
+          "name": "In Progress",
+          "query": "issue.status='In Progress' AND pr.status!=open"
+        },
+        {
+          "name": "In Review",
+          "query": "issue.status='Done' AND  pr.status=open"
+        },
+        {
+          "name": "Merged",
+          "query": "issue.status='Done' AND pr.status=closed AND build.status!=success"
+        },
+        {
+          "name": "Build",
+          "query": "build.status=success AND deployment.env!=DEV"
+        }
+      ]
+    },
+    {
+      "name": "Deployment",
+      "description": "",
+      "stages": [
+        {
+          "name": "DEV",
+          "query": "",
+          "description": "",
+          "wipLimit": null,
+          "gates": null
+        },
+        {
+          "name": "QA",
+          "query": "",
+          "description": "",
+          "wipLimit": null,
+          "gates": null
+        },
+        {
+          "name": "PROD",
+          "query": "",
+          "description": "",
+          "wipLimit": null,
+          "gates": null
+        }
+      ]
+    }
+  ],
+  "leadTime": {
+    "start": "Backlog",
+    "end": "PROD"
+  },
+  "cycleTime": {
+    "start": "In Progress",
+    "end": "PROD"
+  },
+  "mappings": {
+    "priority": {
+      "Lowest": [
+        "Lowest"
+      ],
+      "Low": [
+        "Low"
+      ],
+      "Medium": [
+        "Medium"
+      ],
+      "High": [
+        "High"
+      ],
+      "Highest": [
+        "Highest"
+      ]
+    }
+  },
+  "integrations": [
+  {
+	"name" : "ucvelocity-demo-france"
+	  }
+  ],
+  "linkRules": [],
+  "metrics": null,
+  "metricsBar": null
+}
