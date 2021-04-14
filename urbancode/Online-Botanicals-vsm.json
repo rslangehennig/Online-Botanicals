@@ -24,11 +24,11 @@
       "stages": [
         {
           "name": "In Progress",
-          "query": "issue.status='In Progress' AND pr.status!=open"
+          "query": "issue.status='In Progress'"
         },
         {
           "name": "In Review",
-          "query": "issue.status='Done' AND  pr.status=open"
+          "query": "issue.status='Done' AND pr.status=open"
         },
         {
           "name": "Merged",
@@ -96,11 +96,22 @@
     }
   },
   "integrations": [
-  {
+	{
+	"name" : "Online-Botanicals-GitHub-MurielViale"
+	},
+	{
 	"name" : "ucvelocity-demo-france"
-	  }
+	}
   ],
-  "linkRules": [],
+  "linkRules": [
+  {
+       "fromIntegrationName": "Online-Botanicals-GitHub-MurielViale",
+       "toIntegrationName": "ucvelocity-demo-france",
+       "fromField": "pr.name",
+       "toField": "issue.id",
+       "pattern": "([A-Z]+-[0-9]+)"
+     }
+  ],
   "metrics": null,
   "metricsBar": null
 }
