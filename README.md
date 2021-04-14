@@ -1,3 +1,3 @@
 # Online-Botanicals
 
-This is a very simple Jenkins example integrating with IBM UrbanCode Deploy for a demonstration in April of 2021
+This is an example integrating Online-Botanicals application deployed with IBM UrbanCode Deploy and IBM UrbanCode Velocity for a demonstration in April of 2021
