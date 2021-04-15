@@ -46,21 +46,21 @@
       "stages": [
         {
           "name": "DEV",
-          "query": "",
+          "query": "deployment.env=DEV AND deployment.env!=QA AND deployment.env!=PROD",
           "description": "",
           "wipLimit": null,
           "gates": null
         },
         {
           "name": "QA",
-          "query": "",
+          "query": "deployment.env=QA AND deployment.env!=PROD",
           "description": "",
           "wipLimit": null,
           "gates": null
         },
         {
           "name": "PROD",
-          "query": "",
+          "query": "deployment.env=PROD",
           "description": "",
           "wipLimit": null,
           "gates": null
