@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<wsdl:definitions targetNamespace="http://ejb.order.samples.websphere.ibm.com" xmlns:impl="http://ejb.order.samples.websphere.ibm.com" xmlns:intf="http://ejb.order.samples.websphere.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:wsdlsoap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <wsdl:types>
+    <schema elementFormDefault="qualified" targetNamespace="http://ejb.order.samples.websphere.ibm.com" xmlns="http://www.w3.org/2001/XMLSchema" xmlns:impl="http://ejb.order.samples.websphere.ibm.com" xmlns:intf="http://ejb.order.samples.websphere.ibm.com" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+   <element name="updateOrderStatus">
+    <complexType>
+     <sequence>
+      <element name="orderID" nillable="true" type="xsd:string"/>
+      <element name="orderStatus" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateOrderStatusResponse">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="sendOrder">
+    <complexType>
+     <sequence>
+      <element name="uid" nillable="true" type="xsd:string"/>
+      <element name="orderID" nillable="true" type="xsd:string"/>
+      <element name="item" nillable="true" type="xsd:string"/>
+      <element name="quantity" type="xsd:int"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="sendOrderResponse">
+    <complexType>
+     <sequence>
+      <element name="sendOrderReturn" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateItemStatus">
+    <complexType>
+     <sequence>
+      <element name="orderID" nillable="true" type="xsd:string"/>
+      <element name="item" nillable="true" type="xsd:string"/>
+      <element name="status" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="updateItemStatusResponse">
+    <complexType>
+     <sequence/>
+    </complexType>
+   </element>
+   <element name="checkOrderStatus">
+    <complexType>
+     <sequence>
+      <element name="orderID" nillable="true" type="xsd:string"/>
+     </sequence>
+    </complexType>
+   </element>
+   <element name="checkOrderStatusResponse">
+    <complexType>
+     <sequence>
+      <element name="checkOrderStatusReturn" type="xsd:boolean"/>
+     </sequence>
+    </complexType>
+   </element>
+  </schema>
+  </wsdl:types>
+  <wsdl:message name="sendOrderResponse">
+    <wsdl:part element="impl:sendOrderResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="sendOrderRequest">
+    <wsdl:part element="impl:sendOrder" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="updateItemStatusRequest">
+    <wsdl:part element="impl:updateItemStatus" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="checkOrderStatusResponse">
+    <wsdl:part element="impl:checkOrderStatusResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="updateItemStatusResponse">
+    <wsdl:part element="impl:updateItemStatusResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="updateOrderStatusRequest">
+    <wsdl:part element="impl:updateOrderStatus" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="checkOrderStatusRequest">
+    <wsdl:part element="impl:checkOrderStatus" name="parameters"/>
+  </wsdl:message>
+  <wsdl:message name="updateOrderStatusResponse">
+    <wsdl:part element="impl:updateOrderStatusResponse" name="parameters"/>
+  </wsdl:message>
+  <wsdl:portType name="FrontGate_SEI">
+    <wsdl:operation name="updateOrderStatus">
+      <wsdl:input message="impl:updateOrderStatusRequest" name="updateOrderStatusRequest"/>
+      <wsdl:output message="impl:updateOrderStatusResponse" name="updateOrderStatusResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="sendOrder">
+      <wsdl:input message="impl:sendOrderRequest" name="sendOrderRequest"/>
+      <wsdl:output message="impl:sendOrderResponse" name="sendOrderResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="updateItemStatus">
+      <wsdl:input message="impl:updateItemStatusRequest" name="updateItemStatusRequest"/>
+      <wsdl:output message="impl:updateItemStatusResponse" name="updateItemStatusResponse"/>
+    </wsdl:operation>
+    <wsdl:operation name="checkOrderStatus">
+      <wsdl:input message="impl:checkOrderStatusRequest" name="checkOrderStatusRequest"/>
+      <wsdl:output message="impl:checkOrderStatusResponse" name="checkOrderStatusResponse"/>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="FrontGateSoapBinding" type="impl:FrontGate_SEI">
+    <wsdlsoap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="updateOrderStatus">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="updateOrderStatusRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateOrderStatusResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="sendOrder">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="sendOrderRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendOrderResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="updateItemStatus">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="updateItemStatusRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="updateItemStatusResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="checkOrderStatus">
+      <wsdlsoap:operation soapAction=""/>
+      <wsdl:input name="checkOrderStatusRequest">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="checkOrderStatusResponse">
+        <wsdlsoap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="FrontGate_SEIService">
+    <wsdl:port binding="impl:FrontGateSoapBinding" name="FrontGate">
+      <wsdlsoap:address location="http://localhost:9080/OrderProcessorEJB/services/FrontGate"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

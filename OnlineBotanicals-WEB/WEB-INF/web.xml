@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+   <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.5" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+      <display-name>PlantsByWebSphere Web Application</display-name>
+      <description>PlantsByWebSphere Web App</description>
+      <context-param id="ContextParam_1">
+         <param-name>userID</param-name>
+         <param-value>WSDEMO</param-value>
+      </context-param>
+      <context-param id="ContextParam_2">
+         <param-name>password</param-name>
+         <param-value>wsdemo1</param-value>
+      </context-param>
+      <servlet id="Servlet_1">
+         <servlet-name>AccountServlet</servlet-name>
+         <servlet-class>com.ibm.websphere.samples.plantsbywebspherewar.AccountServlet</servlet-class>
+      </servlet>
+      <servlet id="Servlet_2">
+         <servlet-name>ShoppingServlet</servlet-name>
+         <servlet-class>com.ibm.websphere.samples.plantsbywebspherewar.ShoppingServlet</servlet-class>
+      </servlet>
+      <servlet id="Servlet_3">
+         <servlet-name>ImageServlet</servlet-name>
+         <servlet-class>com.ibm.websphere.samples.plantsbywebspherewar.ImageServlet</servlet-class>
+      </servlet>
+      <servlet id="Servlet_4">
+      	<servlet-name>AdminServlet</servlet-name>
+      	<servlet-class>com.ibm.websphere.samples.plantsbywebspherewar.AdminServlet</servlet-class>
+      	<security-role-ref>
+      		<role-name>SampAdmin</role-name>
+      		<role-link>SampAdmin</role-link>
+      	</security-role-ref>
+      </servlet>
+      <servlet-mapping id="ServletMapping_1">
+         <servlet-name>AccountServlet</servlet-name>
+         <url-pattern>/servlet/AccountServlet</url-pattern>
+      </servlet-mapping>
+      <servlet-mapping id="ServletMapping_2">
+         <servlet-name>ShoppingServlet</servlet-name>
+         <url-pattern>/servlet/ShoppingServlet</url-pattern>
+      </servlet-mapping>
+      <servlet-mapping id="ServletMapping_3">
+         <servlet-name>ImageServlet</servlet-name>
+         <url-pattern>/servlet/ImageServlet</url-pattern>
+      </servlet-mapping>
+      <servlet-mapping>
+      	<servlet-name>AdminServlet</servlet-name>
+      	<url-pattern>/servlet/AdminServlet</url-pattern>
+      </servlet-mapping>
+      <welcome-file-list id="WelcomeFileList_1">
+         <welcome-file>index.html</welcome-file>
+      </welcome-file-list>
+      <error-page id="ErrorCodeErrorPage_1">
+         <error-code>404</error-code>
+         <location>/error.jsp</location>
+      </error-page>
+      <error-page id="ErrorCodeErrorPage_2">
+         <error-code>500</error-code>
+         <location>/error.jsp</location>
+      </error-page>
+      <resource-ref >
+         <res-ref-name>jdbc/PlantsByWebSphereDataSource</res-ref-name>
+         <res-type>javax.sql.DataSource</res-type>
+         <res-auth>Container</res-auth>
+         <res-sharing-scope>Shareable</res-sharing-scope>
+      </resource-ref>
+      <resource-ref >
+	<res-ref-name>jdbc/PlantsByWebSphereDataSourceNONJTA</res-ref-name>
+	<res-type>javax.sql.DataSource</res-type>
+	<res-auth>Container</res-auth>
+	<res-sharing-scope>Shareable</res-sharing-scope>
+      </resource-ref>
+      <resource-ref >
+         <res-ref-name>mail/PlantsByWebSphere</res-ref-name>
+         <res-type>javax.mail.Session</res-type>
+         <res-auth>Container</res-auth>
+         <res-sharing-scope>Shareable</res-sharing-scope>
+      </resource-ref>
+      <security-constraint>
+      	<web-resource-collection>
+      		<web-resource-name>SampAdmin</web-resource-name>
+      		<description>Sample Admin</description>
+            <url-pattern>/admin.html</url-pattern>
+      		<url-pattern>/adminactions.html</url-pattern>
+      		<url-pattern>/adminbanner.html</url-pattern>
+      		<url-pattern>/backorderadmin.jsp</url-pattern>
+      		<url-pattern>/servlet/AdminServlet</url-pattern>
+            <url-pattern>/supplierconfig.jsp</url-pattern>
+      		<http-method>
+      		GET</http-method>
+      		<http-method>
+      		PUT</http-method>
+      		<http-method>
+      		HEAD</http-method>
+      		<http-method>
+      		TRACE</http-method>
+      		<http-method>
+      		POST</http-method>
+      		<http-method>
+      		DELETE</http-method>
+      		<http-method>
+      		OPTIONS</http-method>
+      	</web-resource-collection>
+      	<auth-constraint>
+      		<description>Samples Administrator</description>
+      		<role-name>SampAdmin</role-name>
+      	</auth-constraint>
+      	<user-data-constraint>
+      		<transport-guarantee>NONE</transport-guarantee>
+      	</user-data-constraint>
+      </security-constraint>
+      <login-config>
+      	<auth-method>BASIC</auth-method>
+      	<realm-name>Default</realm-name>
+      </login-config>
+      <security-role>
+      	<description>Samples Administrator</description>
+      	<role-name>SampAdmin</role-name>
+      </security-role>
+
+      <service-ref>
+         <description>WSDL Service FrontGate_SEIService</description>
+         <service-ref-name>service/FrontGate_SEIService</service-ref-name>
+         <service-interface>com.ibm.websphere.samples.order.ejb.FrontGate_SEIService</service-interface>
+      </service-ref>
+
+   </web-app>
