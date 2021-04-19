@@ -125,7 +125,7 @@ while (count < invitems.size())
                   <a class="footer" href="/PlantsByWebSphere/servlet/ShoppingServlet?action=gotocart" target="work">Shopping Cart</a>&nbsp;&nbsp;:&nbsp;
                   <a class="footer" href="/PlantsByWebSphere/servlet/AccountServlet?action=account" target="work">My Account</a>&nbsp;&nbsp;:&nbsp;
                   <a class="footer" href="/PlantsByWebSphere/login.jsp" target="work">Login</a>&nbsp;&nbsp;:&nbsp;
-                  <a class="footer" href="/PlantsByWebSphere/help.jsp" target="_blank">Help</a></p>
+                  <a class="footer" href="/PlantsByWebSphere/help.jsp" target="_blank">Help Randy</a></p>
     </td>
   </tr>
 </table>
