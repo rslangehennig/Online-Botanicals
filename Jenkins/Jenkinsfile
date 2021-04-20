@@ -1,0 +1,129 @@
+node {
+    //URL to Github repository https://github.com/<owner>/<repo>
+    def GITHUB_REPO_URL="https://github.com/VialeMuriel/Online-Botanicals"
+    //Retrieve ENV ID values for DEV and QA from "Download attributes from API" json file
+    def VELOCITY_ENV_ID_DEV="a4a91beb-e2be-4da5-896a-78632d3b451c"
+    //VELOCITY_APP_NAME must match your Velocity pipeline application name
+    def VELOCITY_APP_NAME="Online-Botanicals"
+    //Version number 
+    def VERSION_NUMBER="1.0"
+    //Do not change below this line.
+    def GIT_COMMIT
+    
+    stage ('cloning the repository'){
+        currentBuild.displayName = "${VERSION_NUMBER}.${BUILD_NUMBER}"
+        echo currentBuild.displayName = "${currentBuild.displayName}"
+        majorVersion="${BUILD_NUMBER}"
+        def scm = git branch: 'main', url: "${GITHUB_REPO_URL}"
+        GIT_COMMIT = sh(returnStdout: true, script: "git rev-parse HEAD").trim()
+        echo "GIT_COMMIT=${GIT_COMMIT}"
+    }
+    
+    stage ('build') {
+        sh '''echo $WORKSPACE
+              java -version
+              which java
+              echo $JAVA_HOME
+
+              pwd
+              ls -al
+              
+              # clean workspace
+              rm -rf output output2
+              /opt/IBM/WebSphere/AppServer/java/bin/javac HelloWorld.java
+              java HelloWorld
+              '''
+    }
+    
+    stage ('Generate war artifact') {
+        sh '''# update the version number in the banner.html
+        cd OnlineBotanicals-WEB
+        pwd
+        ls -al
+
+        sed -i "s/OB-VERSION/1.0.${BUILD_NUMBER}/g" banner.html
+        grep help.jsp banner.html
+
+        # create PlantsByWebSphere.war 
+        /opt/IBM/WebSphere/AppServer/java/bin/jar cvf PlantsByWebSphere.war META-INF WEB-INF images *.*
+
+        ls -al *.war
+        /opt/IBM/WebSphere/AppServer/java/bin/jar tvf PlantsByWebSphere.war'''
+    }
+  
+    stage ('Generate EAR artifact') {
+       sh '''# create new EAR
+       pwd
+       ls -al
+
+       echo "Creating deployable artifact...."
+       mkdir output
+       cd output
+       cp ../artifact/*.ear .
+       /opt/IBM/WebSphere/AppServer/java/bin/jar xvf *.ear
+       pwd && ls -al
+
+       # replace PlantsByWebSphere.war
+       rm PlantsByWebSphere.war
+       ls -al
+       cp ../OnlineBotanicals-WEB/PlantsByWebSphere.war .
+       ls -al
+
+       # create new OnlineBotanicals.ear
+       rm OnlineBotanicals.ear
+       /opt/IBM/WebSphere/AppServer/java/bin/jar cvf OnlineBotanicals.ear Database META-INF Plants*.*
+
+       ls -al OnlineBotanicals.ear
+
+       cd ..
+       pwd
+       mkdir output2
+       cd output2
+       cp ../output/OnlineBotanicals.ear .
+       ls -al
+       '''
+    }
+    
+    stage ('Send metrics to UCV') {
+         echo "Building ${VELOCITY_APP_NAME} (Build:${currentBuild.displayName}, GIT_COMMIT:${GIT_COMMIT})"
+         step($class: 'UploadBuild',
+             tenantId: "5ade13625558f2c6688d15ce",
+             revision: "${GIT_COMMIT}",
+             appName: "${VELOCITY_APP_NAME}",
+             versionName:"${currentBuild.displayName}",
+             requestor: "admin", id: "${currentBuild.displayName}")
+    }
+
+    stage ('Push Artifact of Build to UCD') {
+         sh '''export JAVA_HOME=/usr/lib/jvm/java-1.8.0-openjdk-1.8.0.282.b08-1.el7_9.x86_64/jre
+               export UCD_AUTH_TOKEN="4fdac9bf-4c18-4726-b675-2f3ab85c4882"
+               export UCD_WEB_URL="https://52.117.32.21:8444"
+               
+               echo $BUILD_NUMBER
+               CURRENT_BUILD="1.0."${BUILD_NUMBER}
+
+               # Create new component version
+               echo "Create new component version"
+               udclient/udclient -weburl $UCD_WEB_URL -authtoken $UCD_AUTH_TOKEN createVersion -component Online-Botanical-APP -name $CURRENT_BUILD
+               udclient/udclient -weburl $UCD_WEB_URL -authtoken $UCD_AUTH_TOKEN addVersionFiles -component Online-Botanical-APP -version $CURRENT_BUILD -base "/var/lib/jenkins/workspace/Online Botanical/Online-Botanical-Build-Pipeline/output2"
+
+               # Add a component status to allow it to pass gates in UCD
+               echo "Adding component status"
+               udclient/udclient -weburl $UCD_WEB_URL -authtoken $UCD_AUTH_TOKEN addVersionStatus -component Online-Botanical-APP -version $CURRENT_BUILD -status "Unit Tests Passed"
+
+               # Create snapshot
+               echo "Create new snapshot"
+               cp urbancode/snapshot.json .
+               sed -i "s/MYNAME/$CURRENT_BUILD/g" snapshot.json
+               cat snapshot.json
+               udclient/udclient -weburl $UCD_WEB_URL -authtoken $UCD_AUTH_TOKEN createSnapshot snapshot.json
+
+               # Deploy snapshot to DEV environment
+               cp urbancode/deploy-snapshot.json .
+               sed -i "s/MYNAME/$CURRENT_BUILD/g" deploy-snapshot.json
+               cat deploy-snapshot.json
+               udclient/udclient -weburl $UCD_WEB_URL -authtoken $UCD_AUTH_TOKEN requestApplicationProcess deploy-snapshot.json
+               '''
+    }
+
+}
